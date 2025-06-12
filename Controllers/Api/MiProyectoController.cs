@@ -7,8 +7,8 @@ public class MiProyectoController : ControllerBase {
     [HttpGet("integrantes")]
     public ActionResult<MiProyecto> Integrantes() {
         var integrantes = new MiProyecto {
-            NombreIntegrante1 = "IsisMg",
-            NombreIntegrante2 = "brandon-axkro"
+            NombreIntegrante1 = "Uriel Fermin",
+            NombreIntegrante2 = "Joshua Ricardo"
         };
         return Ok(integrantes);
     }
@@ -16,12 +16,12 @@ public class MiProyectoController : ControllerBase {
     [HttpGet("presentacion")]
     public ActionResult Presentacion() {
        MongoClient client = new MongoClient(CadenaConexion.MONGO_DB);
-       var db = client.GetDatabase("Escuela_Isis_brandon");
+       var db = client.GetDatabase("Escuela_Joshua_Uriel");
        var collection = db.GetCollection<Equipo>("Equipo");
 
-       var lista = collection.Find(FilterDefinition<Equipo>.Empty).ToList();
+      var item = collection.Find(FilterDefinition<Equipo>.Empty).FirstOrDefault();
 
-       return Ok(lista);
+        return Ok(item);
     }
 
 }
