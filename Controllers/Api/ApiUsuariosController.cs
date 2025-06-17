@@ -43,7 +43,22 @@ public class ApiUsuariosController : ControllerBase{
    [HttpPost] 
    public IActionResult Create(UsuarioRequest model )
    {
-   
+       // 1. Validor el modelo para que contenga datos
+       if (string.IsNullOrWhiteSpace(model.Correo))
+       {
+          return BadRequest("El correo es requerido");
+       }
+
+       if (string.IsNullOrWhiteSpace(model.Password))
+       {
+          return BadRequest("El password es requerido");
+       }
+
+       if (string.IsNullOrWhiteSpace(model.Nombre))
+       {
+          return BadRequest("El nombre es requerido");
+       }
+
        Usuario bd = new Usuario();
        bd.Nombre = model.Nombre;
        bd.Correo = model.Correo;
