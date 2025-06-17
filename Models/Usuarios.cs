@@ -5,12 +5,12 @@ public class Usuario
     [BsonId, BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
     
-    [BsonElement("Nombre")]
+    [BsonElement("nombre")]
     public string Nombre { get; set; } = string.Empty;
     
-    [BsonElement("Nombre")]
+    [BsonElement("password")]
     public string Password { get; set; } = string.Empty;
 
-    [BsonElement("Nombre")]
+    [BsonElement("correo")]
     public string Correo { get; set; } = string.Empty;
 }

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 
-type Usuario = {
+type usuarios = {
     "Id": string,
     "Nombre": string,
     "Correo": string,
-    "Clave": string
+    "Password": string
 }
-const Usuario = () => {
-    const [registro, setRegistros] = useState<Usuario[]>([]);
+const Usuarios = () => {
+    const [registro, setRegistros] = useState<usuarios[]>([]);
     const [texto, setTexto] = useState("");
 
     const listarRegistro = async () => {
@@ -31,7 +31,7 @@ const Usuario = () => {
         listarRegistro();
     }
 
-    const eliminar = async(item: Usuario) => {
+    const eliminar = async(item: usuarios) => {
         if(!confirm("¿Desea eliminar el usuario " + item.Nombre + "?")){
             return;
         }
@@ -107,7 +107,7 @@ const Usuario = () => {
                                         <td>{index + 1}</td>
                                         <td>{item.Nombre}</td>
                                         <td>{item.Correo}</td>
-                                        <td>{item.Clave}</td>
+                                        <td>{item.Password}</td>
                                         <td className="d-flex gap-2">
                                             <a className="btn btn-primary" href={"/usuarios/" + item.Id}>Editar</a>
                                             <button className="btn btn-danger" onClick={() => eliminar(item)}>Eliminar</button>
@@ -123,4 +123,4 @@ const Usuario = () => {
         </>
     )
 }
-export default Usuario;
+export default Usuarios;

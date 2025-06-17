@@ -10,7 +10,7 @@ public class ApiUsuariosController : ControllerBase{
 
     public ApiUsuariosController(){
         MongoClient client = new MongoClient(CadenaConexion.MONGO_DB);
-        var db = client.GetDatabase("Escuela_Brandon_Isis");
+        var db = client.GetDatabase("equipo_brandon_isis");
         this.collection = db.GetCollection<Usuario>("Usuarios");
     }
 
@@ -39,4 +39,26 @@ public class ApiUsuariosController : ControllerBase{
 
         return NoContent();
     }
+
+   [HttpPost] 
+   public IActionResult Create(UsuarioRequest model )
+   {
+   
+       Usuario bd = new Usuario();
+       bd.Nombre = model.Nombre;
+       bd.Correo = model.Correo;
+       bd.Password = model.Password;
+
+       this.collection.InsertOne(bd); 
+
+
+
+
+
+
+
+        return Ok();
+
+   }
+
 }
