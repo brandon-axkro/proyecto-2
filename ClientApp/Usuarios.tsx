@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 
-type usuarios = {
+type Usuario = {
     "Id": string,
     "Nombre": string,
     "Correo": string,
     "Password": string
 }
-const Usuarios = () => {
-    const [registro, setRegistros] = useState<usuarios[]>([]);
+const Usuario = () => {
+    const [registro, setRegistros] = useState<Usuario[]>([]);
     const [texto, setTexto] = useState("");
 
     const listarRegistro = async () => {
@@ -31,7 +31,7 @@ const Usuarios = () => {
         listarRegistro();
     }
 
-    const eliminar = async(item: usuarios) => {
+    const eliminar = async(item: Usuario) => {
         if(!confirm("¿Desea eliminar el usuario " + item.Nombre + "?")){
             return;
         }
@@ -79,7 +79,10 @@ const Usuarios = () => {
 
         <div className="container mt-4">
             <div className="card">
-                <div className="card-header">Usuarios Existentes</div>
+                 <div className="card-header d-flex justify-content-between align-item-center">
+                    Usuarios Existentes
+                      <a href="/usuarios/editar" className="btn btn-primary">Nuevo</a>
+                    </div>
                 <div className="card-body">
                     <table className="table table-striped">
                         <thead>
@@ -87,7 +90,7 @@ const Usuarios = () => {
                                 <th>No.</th>
                                 <th>Nombre</th>
                                 <th>Correo</th>
-                                <th>Clave</th>
+                                <th>Password</th>
                             </tr>
                         </thead>
                         {
@@ -109,7 +112,7 @@ const Usuarios = () => {
                                         <td>{item.Correo}</td>
                                         <td>{item.Password}</td>
                                         <td className="d-flex gap-2">
-                                            <a className="btn btn-primary" href={"/usuarios/" + item.Id}>Editar</a>
+                                            <a className="btn btn-primary" href={"/usuarios/editar/" + item.Id}>Editar</a>
                                             <button className="btn btn-danger" onClick={() => eliminar(item)}>Eliminar</button>
                                         </td>
                                     </tr>)
@@ -123,4 +126,4 @@ const Usuarios = () => {
         </>
     )
 }
-export default Usuarios;
+export default Usuario;

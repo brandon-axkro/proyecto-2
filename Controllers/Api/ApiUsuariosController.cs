@@ -10,7 +10,7 @@ public class ApiUsuariosController : ControllerBase{
 
     public ApiUsuariosController(){
         MongoClient client = new MongoClient(CadenaConexion.MONGO_DB);
-        var db = client.GetDatabase("equipo_brandon_isis");
+        var db = client.GetDatabase("Escuela_Joshua_Uriel");
         this.collection = db.GetCollection<Usuario>("Usuarios");
     }
 
@@ -30,50 +30,101 @@ public class ApiUsuariosController : ControllerBase{
     }
     
     [HttpDelete("{id}")]
-    public IActionResult Delete(string id){
+    public IActionResult Delete(string id)
+    {
         var filter = Builders<Usuario>.Filter.Eq(x => x.Id, id);
         var item = this.collection.Find(filter).FirstOrDefault();
-        if(item != null){
+        if(item != null)
+        {
             this.collection.DeleteOne(filter);
         }
 
         return NoContent();
     }
 
-   [HttpPost] 
-   public IActionResult Create(UsuarioRequest model )
-   {
-       // 1. Validor el modelo para que contenga datos
-       if (string.IsNullOrWhiteSpace(model.Correo))
-       {
-          return BadRequest("El correo es requerido");
-       }
+    [HttpPost]
+    public IActionResult Create(UsuarioRequest model)
+    {
+        if (string.IsNullOrWhiteSpace(model.Correo))
+        {
+            return BadRequest("El correo es REQUERIDO");
+        }
+        if (string.IsNullOrWhiteSpace(model.Password))
+        {
+            return BadRequest("La clave es REQUERIDA");
+        }
+         if (string.IsNullOrWhiteSpace(model.Nombre))
+        {
+            return BadRequest("El nombre es REQUERIDO");
+        }
 
-       if (string.IsNullOrWhiteSpace(model.Password))
-       {
-          return BadRequest("El password es requerido");
-       }
+        var filter = Builders<Usuario>.Filter.Eq(x => x.Correo, model.Correo);
+        var item = this.collection.Find(filter).FirstOrDefault();
+        if(item != null)
+        {
+            return BadRequest("El correo " + model.Correo + " ya existe en la base de datos");
+        }
 
-       if (string.IsNullOrWhiteSpace(model.Nombre))
-       {
-          return BadRequest("El nombre es requerido");
-       }
+        Usuario bd = new Usuario();
+        bd.Nombre = model.Nombre;
+        bd.Correo = model.Correo;
+        bd.Password = model.Password;
 
-       Usuario bd = new Usuario();
-       bd.Nombre = model.Nombre;
-       bd.Correo = model.Correo;
-       bd.Password = model.Password;
-
-       this.collection.InsertOne(bd); 
-
-
-
-
-
-
-
+        this.collection.InsertOne(bd);
+          
         return Ok();
+    }
 
-   }
+    [HttpGet("{id}")]
+    public IActionResult Read(string id)
+    {
+        var filter = Builders<Usuario>.Filter.Eq(x => x.Id, id);
+        var item = this.collection.Find(filter).FirstOrDefault();
+        if(item == null)
+        {
+            return NotFound("No existe un usuario con el Id proporcionado");
+        }
 
+        return Ok(item);
+    }
+
+     [HttpPut("{id}")]
+    public IActionResult Update(string id, UsuarioRequest model)
+    {
+        if (string.IsNullOrWhiteSpace(model.Correo))
+        {
+            return BadRequest("El correo es REQUERIDO");
+        }
+        if (string.IsNullOrWhiteSpace(model.Password))
+        {
+            return BadRequest("La clave es REQUERIDA");
+        }
+         if (string.IsNullOrWhiteSpace(model.Nombre))
+        {
+            return BadRequest("El nombre es REQUERIDO");
+        }
+
+        var filter = Builders<Usuario>.Filter.Eq(x => x.Id, id);
+        var item = this.collection.Find(filter).FirstOrDefault();
+        if(item == null)
+        {
+            return NotFound("No existe un usuario con el Id proporcionado");
+        }
+
+        var filterCorreo = Builders<Usuario>.Filter.Eq(x => x.Correo, model.Correo);
+        var itemExistente = this.collection.Find(filterCorreo).FirstOrDefault();
+        if(itemExistente != null && itemExistente.Id != id)
+        {
+            return BadRequest("El correo " + model.Correo + " ya existe en la base de datos");
+        }
+
+        var updateOptions = Builders<Usuario>.Update
+        .Set(x => x.Correo, model.Correo)
+        .Set(x => x.Nombre, model.Nombre)
+        .Set(x => x.Password, model.Password);
+
+        this.collection.UpdateOne(filter, updateOptions);
+          
+        return Ok();
+    }
 }
