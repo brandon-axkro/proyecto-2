@@ -10,7 +10,7 @@ public class ApiUsuariosController : ControllerBase{
 
     public ApiUsuariosController(){
         MongoClient client = new MongoClient(CadenaConexion.MONGO_DB);
-        var db = client.GetDatabase("Escuela_Joshua_Uriel");
+        var db = client.GetDatabase("Equipo_brandon_Isis");
         this.collection = db.GetCollection<Usuario>("Usuarios");
     }
 
@@ -51,7 +51,7 @@ public class ApiUsuariosController : ControllerBase{
         }
         if (string.IsNullOrWhiteSpace(model.Password))
         {
-            return BadRequest("La clave es REQUERIDA");
+            return BadRequest("La password es REQUERIDA");
         }
          if (string.IsNullOrWhiteSpace(model.Nombre))
         {
@@ -97,7 +97,7 @@ public class ApiUsuariosController : ControllerBase{
         }
         if (string.IsNullOrWhiteSpace(model.Password))
         {
-            return BadRequest("La clave es REQUERIDA");
+            return BadRequest("El password es REQUERIDO");
         }
          if (string.IsNullOrWhiteSpace(model.Nombre))
         {
